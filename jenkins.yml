@@ -1,0 +1,47 @@
+---
+- name: Install Jenkins on Ubuntu
+  hosts: all
+  become: true
+  become_method: sudo
+
+  pre_tasks:
+    - name: Remove useless packages from the cache
+      ansible.builtin.apt:
+        autoclean: yes
+
+    - name: Remove dependencies that are no longer required
+      ansible.builtin.apt:
+        autoremove: yes
+    - name: Run the equivalent of "apt-get clean" as a separate step
+      apt:
+        clean: yes
+
+    - name: Install Java Development Kit (JDK)
+      apt:
+        name: openjdk-17-jdk
+        state: present
+
+  tasks:
+    - name: jenkins pre tasks1
+      raw: curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee \ /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+    - name: jenkins pre tasks2
+      raw: echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \ https://pkg.jenkins.io/debian-stable binary/ | sudo tee \ /etc/apt/sources.list.d/jenkins.list > /dev/null
+    - name: jenkins pre tasks3
+      raw: sudo apt-get update
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    # - name: jenkis raw installation
+    #   raw: sudo apt-get install jenkins -y
+    - name: ansible.builtin.apt jenkins install
+      ansible.builtin.apt:
+        name: jenkins
+        state: latest
+        update_cache: yes
+
+    - name: Start Jenkins service
+      service:
+        name: jenkins
+        state: started
+        enabled: yes

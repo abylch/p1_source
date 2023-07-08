@@ -1,0 +1,62 @@
+---
+- name: Install Docker on Ubuntu
+  hosts: all
+  become: true
+
+  pre_tasks:
+  - name: Install python for Ansible
+    raw: sudo apt install -y python3
+  # aptitude, a tool for interfacing with the Linux package manager,
+  # and installing the required system packages. Ansible will ensure
+  # these packages are always installed on your server
+  - name: Install aptitude
+    apt:
+      name: aptitude
+      state: latest
+      update_cache: true
+
+  - name: Install required system packages for docker1
+    apt:
+      pkg:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - software-properties-common
+        - python3-pip
+        - virtualenv
+        - python3-setuptools
+      state: latest
+      update_cache: true
+
+  - name: Update apt cache
+    apt:
+      update_cache: yes
+
+  - name: Install prerequisite packages for docker2
+    apt:
+      name:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - software-properties-common
+      state: present
+ 
+  - name: apt-get update
+    raw: sudo apt-get update
+    
+  tasks:
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Install Docker Compose
+      apt:
+        name: docker-compose
+        state: present
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
