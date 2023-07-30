@@ -15,13 +15,13 @@ This project aims to create a complete DevOps work environment by integrating se
 - Create SNS Topic Subscription
 - Create Create CloudWatch Event
 
-![Alt text](http://abraham.bylch.com/img/terraform_ansible_module.png "terraform")
+![Alt text](http://abraham.bylch.com/img/sns_topic_ec2_state.PNG "ansible")
 
 ## Using Ansible
 - Create an ansible Playbook that will install on the EC2 the CI/CD tool Jenkins on port 8080.
 - Create an ansible Playbook that will Install on the same Ec2 docker engine.
 
-![Alt text](http://abraham.bylch.com/img/sns_topic_ec2_state.PNG "ansible")
+![Alt text](http://abraham.bylch.com/img/terraform_ansible_module.png "terraform")
 
 ## Requirements
 
